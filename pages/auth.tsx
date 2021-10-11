@@ -7,6 +7,8 @@ export default function Auth() {
   return <Layout main={<FirebaseAuth />} />;
 }
 
+// intercept auth route acess
+// redirect to "/" if logged in
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const uid = await loadIdToken(req as NextApiRequest);
 
