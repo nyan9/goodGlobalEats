@@ -63,13 +63,13 @@ function SpotSearchBox({ onSelectSpot, defaultValue }: ISearchBoxProps) {
     try {
       const results = await getGeocode({ address });
       const { lat, lng } = await getLatLng(results[0]);
+
       onSelectSpot(address, lat, lng);
     } catch (error) {
       console.error(`🚨🚨🚨 Error: ${error}`);
     }
   };
 
-  console.log({ status, data });
   return (
     <Combobox onSelect={handleSelect}>
       <ComboboxInput
@@ -81,6 +81,7 @@ function SpotSearchBox({ onSelectSpot, defaultValue }: ISearchBoxProps) {
         placeholder="Enter name or address of the spot"
         autoComplete="off"
       />
+
       <ComboboxPopover>
         <ComboboxList>
           {status === "OK" &&
