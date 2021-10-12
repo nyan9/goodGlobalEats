@@ -3,6 +3,7 @@ import { FunctionComponent } from "react";
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
+  getDetails,
 } from "use-places-autocomplete";
 import { useGoogleMapsScript, Libraries } from "use-google-maps-script";
 import {
@@ -63,6 +64,7 @@ function SpotSearchBox({ onSelectSpot, defaultValue }: ISearchBoxProps) {
     try {
       const results = await getGeocode({ address });
       const { lat, lng } = await getLatLng(results[0]);
+      //   const details = await getDetails({ placeId: results[0].place_id });
 
       onSelectSpot(address, lat, lng);
     } catch (error) {
