@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 // import { useRouter } from "next/router";
 // import Link from "next/link";
 // import { Image } from "cloudinary-react";
-// import { SearchBox } from "./searchBox";
+import { SearchBox } from "./searchBox";
 // import {
 //   CreateSpotMutation,
 //   CreateSpotMutationVariables,
@@ -34,11 +34,11 @@ export default function SpotForm({}: IProps) {
   useEffect(() => {
     register(
       { name: "address" },
-      { required: "Please enter the name of the spot" }
+      { required: "Please enter name of the spot" }
     );
     register({ name: "latitude" }, { required: true, min: -90, max: 90 });
     register({ name: "longitude" }, { required: true, min: -180, max: 180 });
-  });
+  }, [register]);
 
   const handleCreate = async (data: IFormData) => {};
 
@@ -55,6 +55,15 @@ export default function SpotForm({}: IProps) {
         <label htmlFor="search" className="block">
           Search for your spot
         </label>
+        <SearchBox
+          onSelectSpot={(address, latitude, longitude) => {
+            setValue("address", address);
+            setValue("latitude", latitude);
+            setValue("longitude", longitude);
+          }}
+          defaultValue=""
+        />
+
         {errors.address && <p>{errors.address.message}</p>}
       </div>
     </form>
