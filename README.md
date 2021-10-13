@@ -1,5 +1,5 @@
 # GOOD EATS ALL ACROSS THE GLOBE!
 
-[prisma schema](prisma/schema.prisma)
+[Prisma Schema](prisma/schema.prisma)
 
-[graphQL schema](schema.gql)
+[GraphQL Schema](schema.gql)
