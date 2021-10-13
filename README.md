@@ -1,3 +1,4 @@
 # GOOD EATS ALL ACROSS THE GLOBE!
 
-[schema](prisma/migrations/20211012212607-create-spots/README.md)
+[prisma schema](prisma/schema.prisma)
+[graphql schema](schema.gql)
