@@ -11,9 +11,10 @@ interface ISpot {
 
 interface IProps {
   spot: ISpot;
+  nearby: ISpot[];
 }
 
-export default function SingleMap({ spot }: IProps) {
+export default function SingleMap({ spot, nearby }: IProps) {
   const [viewport, setViewport] = useState({
     latitude: spot.latitude,
     longitude: spot.longitude,
@@ -48,6 +49,22 @@ export default function SingleMap({ spot }: IProps) {
             <img src="/gge-color.png" className="w-8" alt="selected spot" />
           </button>
         </Marker>
+
+        {nearby.map((near) => (
+          <Marker
+            key={near.id}
+            latitude={near.latitude}
+            longitude={near.longitude}
+            offsetLeft={-15}
+            offsetTop={-15}
+          >
+            <Link href={`/spots/${near.id}`}>
+              <a style={{ width: "30px", height: "30px", fontSize: "30px" }}>
+                <img src="/gge-solid.png" className="w-8" alt="nearby spot" />
+              </a>
+            </Link>
+          </Marker>
+        ))}
       </ReactMapGL>
     </div>
   );

@@ -21,6 +21,11 @@ const SHOW_SPOT_QUERY = gql`
       drink
       latitude
       longitude
+      nearby {
+        id
+        latitude
+        longitude
+      }
     }
   }
 `;
@@ -73,7 +78,7 @@ function SpotData({ id }: { id: string }) {
             <p> Recommneded Drink: 🍸 {spot.drink}</p>
           </div>
           <div className="sm:w-full md:w-1/2">
-            <SingleMap spot={spot} />
+            <SingleMap spot={spot} nearby={spot.nearby}/>
           </div>
         </div>
       }
