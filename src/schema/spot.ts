@@ -74,7 +74,7 @@ class Spot {
   publicId(): string {
     // cloudinary Image component only need the publicId from the full image string
     const parts = this.image.split("/");
-    return parts[-1];
+    return parts[parts.length - 1];
   }
 
   @Field((_type) => String)

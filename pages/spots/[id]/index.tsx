@@ -3,7 +3,7 @@ import { Image } from "cloudinary-react";
 import { useQuery, gql } from "@apollo/client";
 import Layout from "src/components/layout";
 // import SpotNav from "src/components/";
-// import SingleMap from "src/components/singleMap";
+import SingleMap from "src/components/singleMap";
 import {
   ShowSpotQuery,
   ShowSpotQueryVariables,
@@ -72,7 +72,9 @@ function SpotData({ id }: { id: string }) {
             <p> Recommended Entree: 🍛 {spot.entree}</p>
             <p> Recommneded Drink: 🍸 {spot.drink}</p>
           </div>
-          <div className="sm:w-full md:w-1/2">SingleMap</div>
+          <div className="sm:w-full md:w-1/2">
+            <SingleMap spot={spot} />
+          </div>
         </div>
       }
     />
