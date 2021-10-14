@@ -89,6 +89,11 @@ class Spot {
 
 @Resolver()
 export class SpotResolver {
+  @Query((_returns) => Spot, { nullable: true })
+  async spot(@Arg("id") id: string, @Ctx() ctx: Context) {
+    return ctx.prisma.spot.findOne({ where: { id: parseInt(id, 10) } });
+  }
+
   @Authorized()
   @Mutation((_returns) => Spot, { nullable: true })
   async createSpot(
