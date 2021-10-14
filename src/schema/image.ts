@@ -23,7 +23,7 @@ export class ImageResolver {
   @Mutation((_returns) => ImageSignature)
   createImageSignature(): ImageSignature {
     const timestamp = Math.round(new Date().getTime() / 1000);
-    const signature: string = cloudinary.utils.api_sign_requrest(
+    const signature: string = cloudinary.utils.api_sign_request(
       {
         timestamp,
       },
