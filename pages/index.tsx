@@ -68,7 +68,7 @@ export default function Spot() {
             className="w-1/2 pb-4"
             style={{ maxHeight: "calc(100vh - 64px)", overflowX: "scroll" }}
           >
-            SpotList
+            <SpotList spots={lastData ? lastData.spots : []} />
           </div>
           <div className="w-1/2">
             <Map
