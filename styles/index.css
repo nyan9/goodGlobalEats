@@ -28,3 +28,8 @@ input {
 .marker-active {
   z-index: 1;
 }
+
+.litem-active {
+  background-color: #ff435b;
+  scroll-snap-align: top;
+}

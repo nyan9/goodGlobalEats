@@ -40,7 +40,8 @@ const parseBounds = (boundsString: string) => {
 };
 
 export default function Spot() {
-  const [highlightedId, setHighlightedId] = useState<string | null>(null);
+  const [highlightedMarkId, setHighlightedMarkId] = useState<string | null>(null);
+  const [highlightedListId, setHighlightedListId] = useState<string | null>(null);
   // string type because useDebounce does a shallow compare. Also being saved to localStorage.
   const [dataBounds, setDataBounds] = useLocalState<string>(
     "bounds",
@@ -71,14 +72,16 @@ export default function Spot() {
           >
             <SpotList
               spots={lastData ? lastData.spots : []}
-              setHighlightedId={setHighlightedId}
+              highlightedListId={highlightedListId}
+              setHighlightedMarkId={setHighlightedMarkId}
             />
           </div>
           <div className="w-1/2">
             <Map
               setDataBounds={setDataBounds}
               spots={lastData ? lastData.spots : []}
-              highlightedId={highlightedId}
+              highlightedMarkId={highlightedMarkId}
+              setHighlightedListId={setHighlightedListId}
             />
           </div>
         </div>

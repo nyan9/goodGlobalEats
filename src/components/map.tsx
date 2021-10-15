@@ -10,10 +10,16 @@ import { SpotsQuery_spots } from "src/generated/SpotsQuery";
 interface IProps {
   setDataBounds: (bounds: string) => void;
   spots: SpotsQuery_spots[];
-  highlightedId: string | null;
+  highlightedMarkId: string | null;
+  setHighlightedListId: (id: string | null) => void;
 }
 
-export default function Map({ setDataBounds, spots, highlightedId }: IProps) {
+export default function Map({
+  setDataBounds,
+  spots,
+  highlightedMarkId,
+  setHighlightedListId,
+}: IProps) {
   const [selected, setSelected] = useState<SpotsQuery_spots | null>(null);
   const mapRef = useRef<ReactMapGL | null>(null);
   const [viewPort, setViewPort] = useLocalState<ViewState>("viewport", {
@@ -57,16 +63,20 @@ export default function Map({ setDataBounds, spots, highlightedId }: IProps) {
             longitude={spot.longitude}
             offsetLeft={-15}
             offsetTop={-15}
-            className={highlightedId === spot.id ? "marker-active" : ""}
+            className={highlightedMarkId === spot.id ? "marker-active" : ""}
           >
             <button
               style={{ width: "30px", height: "30px", fontSize: "30px" }}
               type="button"
               onClick={() => setSelected(spot)}
+              onMouseEnter={() => setHighlightedListId(spot.id)}
+              onMouseLeave={() => setHighlightedListId(null)}
             >
               <img
                 src={
-                  highlightedId === spot.id ? "gge-color.png" : "/gge-solid.png"
+                  highlightedMarkId === spot.id
+                    ? "gge-color.png"
+                    : "/gge-solid.png"
                 }
                 alt="spot"
                 className="w-8"
