@@ -30,6 +30,15 @@ class CoordinatesInput {
 }
 
 @InputType()
+class BoundsInput {
+  @Field((_type) => CoordinatesInput)
+  sw!: CoordinatesInput;
+
+  @Field((_type) => CoordinatesInput)
+  ne!: CoordinatesInput;
+}
+
+@InputType()
 class SpotInput {
   @Field((_type) => String)
   address!: string;
@@ -112,6 +121,17 @@ export class SpotResolver {
   @Query((_returns) => Spot, { nullable: true })
   async spot(@Arg("id") id: string, @Ctx() ctx: Context) {
     return ctx.prisma.spot.findOne({ where: { id: parseInt(id, 10) } });
+  }
+
+  @Query((_returns) => [Spot], { nullable: false })
+  async spots(@Arg("bounds") bounds: BoundsInput, @Ctx() ctx: Context) {
+    return ctx.prisma.spot.findMany({
+      where: {
+        latitude: { gte: bounds.sw.latitude, lte: bounds.ne.latitude },
+        longitude: { gte: bounds.sw.longitude, lte: bounds.ne.longitude },
+      },
+      take: 50,
+    });
   }
 
   @Authorized()

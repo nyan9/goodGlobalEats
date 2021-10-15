@@ -1,23 +1,62 @@
 // import { useState } from "react";
-// import { useQuery, gql } from "@apollo/client";
+import { useQuery, gql } from "@apollo/client";
 import { useDebounce } from "use-debounce";
 import Layout from "src/components/layout";
 import Map from "src/components/map";
 // import SpotList from "src/components/spotList";
-// import { useLastData } from "src/utils/useLastData";
+import { useLastData } from "src/utils/useLastData";
 import { useLocalState } from "src/utils/useLocalState";
-// import { SpotsQuery, SpotsQueryVariables } from "src/generated/SpotsQuery";
+import { SpotsQuery, SpotsQueryVariables } from "src/generated/SpotsQuery";
+
+const SPOTS_QUERY = gql`
+  query SpotsQuery($bounds: BoundsInput!) {
+    spots(bounds: $bounds) {
+      id
+      latitude
+      longitude
+      address
+      publicId
+      appetizer
+      entree
+      drink
+    }
+  }
+`;
 
 type BoundsArray = [[number, number], [number, number]];
+const parseBounds = (boundsString: string) => {
+  const bounds = JSON.parse(boundsString) as BoundsArray;
+
+  return {
+    sw: {
+      latitude: bounds[0][1],
+      longitude: bounds[0][0],
+    },
+    ne: {
+      latitude: bounds[1][1],
+      longitude: bounds[1][0],
+    },
+  };
+};
 
 export default function Spot() {
+  // string type because useDebounce does a shallow compare. Also being saved to localStorage.
   const [dataBounds, setDataBounds] = useLocalState<string>(
     "bounds",
-    "[[0,0],[0,0]"
+    "[[0,0],[0,0]]"
   );
 
   // reduce the amount of queries called to the apollo server when zooming in/out of map
   const [debouncedDataBounds] = useDebounce(dataBounds, 200);
+  const { data, error } = useQuery<SpotsQuery, SpotsQueryVariables>(
+    SPOTS_QUERY,
+    {
+      variables: { bounds: parseBounds(debouncedDataBounds) },
+    }
+  );
+  const lastData = useLastData(data);
+
+  if (error) return <Layout main={<div>Error loading spots</div>} />;
 
   return (
     <Layout
