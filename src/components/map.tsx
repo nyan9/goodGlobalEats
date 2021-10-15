@@ -1,11 +1,11 @@
+import "mapbox-gl/dist/mapbox-gl.css";
 import { useRef, useState } from "react";
 import Link from "next/link";
 import { Image } from "cloudinary-react";
 import ReactMapGL, { Marker, Popup, ViewState } from "react-map-gl";
-// import "mapbox-gl/dist/mapbox-gl.css";
 import { useLocalState } from "src/utils/useLocalState";
 import { SpotsQuery_spots } from "src/generated/SpotsQuery";
-// import { SearchBox } from "./searchBox";
+import { SearchBox } from "./searchBox";
 
 interface IProps {
   setDataBounds: (bounds: string) => void;
@@ -56,6 +56,30 @@ export default function Map({
           }
         }}
       >
+        <div
+          className="absolute top-0 w-full z-10 p-4"
+          onDoubleClick={(e) => e.stopPropagation()}
+        >
+          <SearchBox
+            defaultValue=""
+            onSelectSpot={(_address, latitude, longitude) => {
+              if (latitude && longitude) {
+                setViewPort((prev) => ({
+                  ...prev,
+                  latitude,
+                  longitude,
+                  zoom: 12,
+                }));
+
+                if (mapRef.current) {
+                  const bounds = mapRef.current.getMap().getBounds();
+                  setDataBounds(JSON.stringify(bounds.toArray()));
+                }
+              }
+            }}
+          />
+        </div>
+
         {spots.map((spot) => (
           <Marker
             key={spot.id}
