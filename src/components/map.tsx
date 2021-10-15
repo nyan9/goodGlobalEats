@@ -10,9 +10,10 @@ import { SpotsQuery_spots } from "src/generated/SpotsQuery";
 interface IProps {
   setDataBounds: (bounds: string) => void;
   spots: SpotsQuery_spots[];
+  highlightedId: string | null;
 }
 
-export default function Map({ setDataBounds, spots }: IProps) {
+export default function Map({ setDataBounds, spots, highlightedId }: IProps) {
   const [selected, setSelected] = useState<SpotsQuery_spots | null>(null);
   const mapRef = useRef<ReactMapGL | null>(null);
   const [viewPort, setViewPort] = useLocalState<ViewState>("viewport", {
@@ -56,13 +57,20 @@ export default function Map({ setDataBounds, spots }: IProps) {
             longitude={spot.longitude}
             offsetLeft={-15}
             offsetTop={-15}
+            className={highlightedId === spot.id ? "marker-active" : ""}
           >
             <button
               style={{ width: "30px", height: "30px", fontSize: "30px" }}
               type="button"
               onClick={() => setSelected(spot)}
             >
-              <img src="/gge-solid.png" alt="spot" className="w-8" />
+              <img
+                src={
+                  highlightedId === spot.id ? "gge-color.png" : "/gge-solid.png"
+                }
+                alt="spot"
+                className="w-8"
+              />
             </button>
           </Marker>
         ))}

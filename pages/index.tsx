@@ -1,4 +1,4 @@
-// import { useState } from "react";
+import { useState } from "react";
 import { useQuery, gql } from "@apollo/client";
 import { useDebounce } from "use-debounce";
 import Layout from "src/components/layout";
@@ -40,6 +40,7 @@ const parseBounds = (boundsString: string) => {
 };
 
 export default function Spot() {
+  const [highlightedId, setHighlightedId] = useState<string | null>(null);
   // string type because useDebounce does a shallow compare. Also being saved to localStorage.
   const [dataBounds, setDataBounds] = useLocalState<string>(
     "bounds",
@@ -68,12 +69,16 @@ export default function Spot() {
             className="w-1/2 pb-4"
             style={{ maxHeight: "calc(100vh - 64px)", overflowX: "scroll" }}
           >
-            <SpotList spots={lastData ? lastData.spots : []} />
+            <SpotList
+              spots={lastData ? lastData.spots : []}
+              setHighlightedId={setHighlightedId}
+            />
           </div>
           <div className="w-1/2">
             <Map
               setDataBounds={setDataBounds}
               spots={lastData ? lastData.spots : []}
+              highlightedId={highlightedId}
             />
           </div>
         </div>

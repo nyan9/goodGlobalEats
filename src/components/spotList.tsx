@@ -4,14 +4,19 @@ import { SpotsQuery_spots } from "src/generated/SpotsQuery";
 
 interface IProps {
   spots: SpotsQuery_spots[];
+  setHighlightedId: (id: string | null) => void;
 }
 
-export default function SpotList({ spots }: IProps) {
+export default function SpotList({ spots, setHighlightedId }: IProps) {
   return (
     <>
       {spots.map((spot) => (
         <Link key={spot.id} href={`/spots/${spot.id}`}>
-          <div className="px-6 pt-4 cursor-pointer flex flex-wrap">
+          <div
+            className="px-6 pt-4 cursor-pointer flex flex-wrap"
+            onMouseEnter={() => setHighlightedId(spot.id)}
+            onMouseLeave={() => setHighlightedId(null)}
+          >
             <div className="sm:w-full md:w-1/2">
               <Image
                 cloudName={process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}
