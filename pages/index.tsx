@@ -3,7 +3,7 @@ import { useQuery, gql } from "@apollo/client";
 import { useDebounce } from "use-debounce";
 import Layout from "src/components/layout";
 import Map from "src/components/map";
-// import SpotList from "src/components/spotList";
+import SpotList from "src/components/spotList";
 import { useLastData } from "src/utils/useLastData";
 import { useLocalState } from "src/utils/useLocalState";
 import { SpotsQuery, SpotsQueryVariables } from "src/generated/SpotsQuery";
@@ -54,6 +54,8 @@ export default function Spot() {
       variables: { bounds: parseBounds(debouncedDataBounds) },
     }
   );
+
+  // custom hook to prevent data flickering (undefined) when querying SPOTS_QUERY
   const lastData = useLastData(data);
 
   if (error) return <Layout main={<div>Error loading spots</div>} />;
@@ -69,7 +71,10 @@ export default function Spot() {
             SpotList
           </div>
           <div className="w-1/2">
-            <Map setDataBounds={setDataBounds} />
+            <Map
+              setDataBounds={setDataBounds}
+              spots={lastData ? lastData.spots : []}
+            />
           </div>
         </div>
       }

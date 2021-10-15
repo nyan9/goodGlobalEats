@@ -4,14 +4,16 @@ import { Image } from "cloudinary-react";
 import ReactMapGL, { Marker, Popup, ViewState } from "react-map-gl";
 // import "mapbox-gl/dist/mapbox-gl.css";
 import { useLocalState } from "src/utils/useLocalState";
-// import { SpotsQuery_spots } from "src/generated/SpotsQuery";
+import { SpotsQuery_spots } from "src/generated/SpotsQuery";
 // import { SearchBox } from "./searchBox";
 
 interface IProps {
   setDataBounds: (bounds: string) => void;
+  spots: SpotsQuery_spots[];
 }
 
-export default function Map({ setDataBounds }: IProps) {
+export default function Map({ setDataBounds, spots }: IProps) {
+  const [selected, setSelected] = useState<SpotsQuery_spots | null>(null);
   const mapRef = useRef<ReactMapGL | null>(null);
   const [viewPort, setViewPort] = useLocalState<ViewState>("viewport", {
     latitude: 40.692241,
@@ -46,7 +48,53 @@ export default function Map({ setDataBounds }: IProps) {
             setDataBounds(JSON.stringify(bounds.toArray()));
           }
         }}
-      ></ReactMapGL>
+      >
+        {spots.map((spot) => (
+          <Marker
+            key={spot.id}
+            latitude={spot.latitude}
+            longitude={spot.longitude}
+            offsetLeft={-15}
+            offsetTop={-15}
+          >
+            <button
+              style={{ width: "30px", height: "30px", fontSize: "30px" }}
+              type="button"
+              onClick={() => setSelected(spot)}
+            >
+              <img src="/gge-solid.png" alt="spot" className="w-8" />
+            </button>
+          </Marker>
+        ))}
+
+        {selected && (
+          <Popup
+            latitude={selected.latitude}
+            longitude={selected.longitude}
+            onClose={() => setSelected(null)}
+            closeOnClick={false}
+          >
+            <div className="text-center">
+              <h3 className="px-4">{selected.address.substr(0, 30)}</h3>
+              <Image
+                className="mx-auto my-4"
+                cloudName={process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}
+                publicId={selected.publicId}
+                secure
+                dpr="auto"
+                quality="auto"
+                width={200}
+                height={Math.floor((9 / 16) * 200)}
+                crop="fill"
+                gravity="auto"
+              />
+              <Link href={`/spots/${selected.id}`}>
+                <a>View Spot</a>
+              </Link>
+            </div>
+          </Popup>
+        )}
+      </ReactMapGL>
     </div>
   );
 }
