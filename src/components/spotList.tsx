@@ -29,7 +29,7 @@ export default function SpotList({
       {spots.map((spot) => (
         <Link key={spot.id} href={`/spots/${spot.id}`}>
           <div
-            ref={highlightedListId === spot.id && lItemRef}
+            ref={highlightedListId === spot.id ? lItemRef : null}
             className={`px-6 pt-4 cursor-pointer flex flex-wrap ${
               highlightedListId === spot.id ? "litem-active" : ""
             }`}
