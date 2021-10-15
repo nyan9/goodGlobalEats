@@ -7,9 +7,11 @@ import { useLocalState } from "src/utils/useLocalState";
 // import { SpotsQuery_spots } from "src/generated/SpotsQuery";
 // import { SearchBox } from "./searchBox";
 
-interface IProps {}
+interface IProps {
+  setDataBounds: (bounds: string) => void;
+}
 
-export default function Map({}: IProps) {
+export default function Map({ setDataBounds }: IProps) {
   const mapRef = useRef<ReactMapGL | null>(null);
   const [viewPort, setViewPort] = useLocalState<ViewState>("viewport", {
     latitude: 40.692241,
@@ -29,6 +31,21 @@ export default function Map({}: IProps) {
         minZoom={5}
         maxZoom={18}
         mapStyle="mapbox://styles/ryan9/ckulvcm7f3tmo17s6txyrq355"
+        onLoad={() => {
+          if (mapRef.current) {
+            const bounds = mapRef.current.getMap().getBounds();
+
+            setDataBounds(JSON.stringify(bounds.toArray()));
+          }
+        }}
+        // only get the bounds of the map when it's not being dragged and rendered
+        onInteractionStateChange={(extra) => {
+          if (!extra.isDragging && mapRef.current) {
+            const bounds = mapRef.current.getMap().getBounds();
+
+            setDataBounds(JSON.stringify(bounds.toArray()));
+          }
+        }}
       ></ReactMapGL>
     </div>
   );
