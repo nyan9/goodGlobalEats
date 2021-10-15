@@ -31,5 +31,5 @@ input {
 
 .litem-active {
   background-color: #ff435b;
-  scroll-snap-align: top;
+  /* scroll-snap-align: top; */
 }

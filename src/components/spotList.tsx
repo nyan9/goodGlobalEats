@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Image } from "cloudinary-react";
 import { SpotsQuery_spots } from "src/generated/SpotsQuery";
+import { MutableRefObject, useEffect, useRef } from "react";
 
 interface IProps {
   spots: SpotsQuery_spots[];
@@ -13,11 +14,22 @@ export default function SpotList({
   highlightedListId,
   setHighlightedMarkId,
 }: IProps) {
+  const lItemRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (lItemRef.current) {
+      lItemRef.current.scrollIntoView({
+        behavior: "smooth",
+      });
+    }
+  }, [highlightedListId]);
+
   return (
     <>
       {spots.map((spot) => (
         <Link key={spot.id} href={`/spots/${spot.id}`}>
           <div
+            ref={highlightedListId === spot.id && lItemRef}
             className={`px-6 pt-4 cursor-pointer flex flex-wrap ${
               highlightedListId === spot.id ? "litem-active" : ""
             }`}
