@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { Image } from "cloudinary-react";
 import { useQuery, gql } from "@apollo/client";
 import Layout from "src/components/layout";
-// import SpotNav from "src/components/";
+import SpotNav from "src/components/";
 import SingleMap from "src/components/singleMap";
 import {
   ShowSpotQuery,
@@ -57,6 +57,8 @@ function SpotData({ id }: { id: string }) {
       main={
         <div className="sm:block md:flex">
           <div className="sm:w-full md:w-1/2 p-4">
+            <SpotNav spot={spot} />
+
             <h1 className="text-3xl my-2">{spot.address}</h1>
 
             <Image
@@ -78,7 +80,7 @@ function SpotData({ id }: { id: string }) {
             <p> Recommneded Drink: 🍸 {spot.drink}</p>
           </div>
           <div className="sm:w-full md:w-1/2">
-            <SingleMap spot={spot} nearby={spot.nearby}/>
+            <SingleMap spot={spot} nearby={spot.nearby} />
           </div>
         </div>
       }
