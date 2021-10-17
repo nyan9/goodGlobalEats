@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { Image } from "cloudinary-react";
 import { useQuery, gql } from "@apollo/client";
 import Layout from "src/components/layout";
-import SpotNav from "src/components/";
+import SpotNav from "src/components/spotNav";
 import SingleMap from "src/components/singleMap";
 import {
   ShowSpotQuery,
