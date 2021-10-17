@@ -153,4 +153,30 @@ export class SpotResolver {
       },
     });
   }
+
+  @Authorized()
+  @Mutation((_returns) => Spot, { nullable: true })
+  async updateSpot(
+    @Arg("id") id: string,
+    @Arg("input") input: SpotInput,
+    @Ctx() ctx: AuthorizedContext
+  ) {
+    const spotId = parseInt(id, 10);
+    const spot = await ctx.prisma.spot.findOne({ where: { id: spotId } });
+
+    if (!spot || spot.userId !== ctx.uid) return null;
+
+    return await ctx.prisma.spot.update({
+      where: { id: spotId },
+      data: {
+        image: input.image,
+        address: input.address,
+        latitude: input.coordinates.latitude,
+        longitude: input.coordinates.longitude,
+        appetizer: input.appetizer,
+        entree: input.entree,
+        drink: input.drink,
+      },
+    });
+  }
 }

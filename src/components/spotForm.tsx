@@ -3,16 +3,16 @@ import { useForm } from "react-hook-form";
 import { useMutation, gql } from "@apollo/client";
 import { useRouter } from "next/router";
 import Link from "next/link";
-// import { Image } from "cloudinary-react";
+import { Image } from "cloudinary-react";
 import { SearchBox } from "./searchBox";
 import {
   CreateSpotMutation,
   CreateSpotMutationVariables,
 } from "src/generated/CreateSpotMutation";
-// import {
-//   UpdateSpotMutation,
-//   UpdateSpotMutationVariables,
-// } from "src/generated/UpdateSpotMutation";
+import {
+  UpdateSpotMutation,
+  UpdateSpotMutationVariables,
+} from "src/generated/UpdateSpotMutation";
 import { CreateSignatureMutation } from "src/generated/CreateSignatureMutation";
 
 const SIGNATURE_MUTATION = gql`
@@ -28,6 +28,22 @@ const CREATE_SPOT_MUTATION = gql`
   mutation CreateSpotMutation($input: SpotInput!) {
     createSpot(input: $input) {
       id
+    }
+  }
+`;
+
+const UPDATE_SPOT_MUTATION = gql`
+  mutation UpdateSpotMutation($id: String!, $input: SpotInput!) {
+    updateSpot(id: $id, input: $input) {
+      id
+      image
+      publicId
+      address
+      latitude
+      longitude
+      appetizer
+      entree
+      drink
     }
   }
 `;
@@ -67,15 +83,40 @@ interface IFormData {
   image: FileList;
 }
 
-interface IProps {}
+interface ISpot {
+  id: string;
+  image: string;
+  publicId: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  appetizer: string;
+  entree: string;
+  drink: string;
+}
 
-export default function SpotForm({}: IProps) {
+interface IProps {
+  spot?: ISpot;
+}
+
+export default function SpotForm({ spot }: IProps) {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [previewImage, setPreviewImage] = useState<string>();
   const { register, handleSubmit, setValue, errors, watch } = useForm<
     IFormData
-  >({ defaultValues: {} });
+  >({
+    defaultValues: spot
+      ? {
+          address: spot.address,
+          latitude: spot.latitude,
+          longitude: spot.longitude,
+          appetizer: spot.appetizer,
+          entree: spot.entree,
+          drink: spot.drink,
+        }
+      : {},
+  });
   const address = watch("address");
 
   const [createSignature] = useMutation<CreateSignatureMutation>(
@@ -85,6 +126,10 @@ export default function SpotForm({}: IProps) {
     CreateSpotMutation,
     CreateSpotMutationVariables
   >(CREATE_SPOT_MUTATION);
+  const [updateSpot] = useMutation<
+    UpdateSpotMutation,
+    UpdateSpotMutationVariables
+  >(UPDATE_SPOT_MUTATION);
 
   useEffect(() => {
     register(
@@ -124,26 +169,71 @@ export default function SpotForm({}: IProps) {
     }
   };
 
+  const handleUpdate = async (currentSpot: ISpot, data: IFormData) => {
+    let image = currentSpot.image;
+
+    if (data.image[0]) {
+      const { data: signatureData } = await createSignature();
+      if (signatureData) {
+        const { signature, timestamp } = signatureData.createImageSignature;
+        const imageData = await uploadImage(
+          data.image[0],
+          signature,
+          timestamp
+        );
+        image = imageData.secure_url;
+      }
+    }
+
+    const { data: spotData } = await updateSpot({
+      variables: {
+        id: currentSpot.id,
+        input: {
+          image: image,
+          address: currentSpot.address,
+          coordinates: {
+            latitude: currentSpot.latitude,
+            longitude: currentSpot.longitude,
+          },
+          appetizer: data.appetizer,
+          entree: data.entree,
+          drink: data.drink,
+        },
+      },
+    });
+
+    if (spotData?.updateSpot) {
+      router.push(`/houses/${currentSpot.id}`);
+    }
+  };
+
   const onSubmit = (data: IFormData) => {
     setSubmitting(false);
-    handleCreate(data);
+    if (!!spot) {
+      handleUpdate(spot, data);
+    } else {
+      handleCreate(data);
+    }
   };
 
   return (
     <form className="mx-auto max-w-xl py-4" onSubmit={handleSubmit(onSubmit)}>
-      <h1 className="text-xl">Put On a Spot</h1>
+      <h1 className="text-xl">
+        {spot ? `Editing ${spot.address}` : "Put On a Spot"}
+      </h1>
 
       <div className="mt-4">
         <label htmlFor="search" className="block">
           Search for your spot
         </label>
+
         <SearchBox
           onSelectSpot={(address, latitude, longitude) => {
             setValue("address", address);
             setValue("latitude", latitude);
             setValue("longitude", longitude);
           }}
-          defaultValue=""
+          defaultValue={spot ? spot.address : ""}
         />
 
         {errors.address && <p>{errors.address.message}</p>}
@@ -166,7 +256,7 @@ export default function SpotForm({}: IProps) {
               style={{ display: "none" }}
               ref={register({
                 validate: (fileList: FileList) => {
-                  if (fileList.length === 1) return true;
+                  if (spot || fileList.length === 1) return true;
                   return "Please upload one file";
                 },
               })}
@@ -182,13 +272,27 @@ export default function SpotForm({}: IProps) {
               }}
             />
 
-            {previewImage && (
+            {previewImage ? (
               <img
                 src={previewImage}
                 className="mt-4 object-cover"
                 style={{ width: "576px", height: `${(16 / 9) * 576}px` }}
               />
-            )}
+            ) : spot ? (
+              <Image
+                className="mt-4"
+                cloudName={process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}
+                publicId={spot.publicId}
+                alt={spot.address}
+                secure
+                dpr="auto"
+                quality="auto"
+                width={576}
+                height={Math.floor((9 / 16) * 576)}
+                crop="fill"
+                gravity="auto"
+              />
+            ) : null}
             {errors.image && <p>{errors.image.message}</p>}
           </div>
 
@@ -240,7 +344,7 @@ export default function SpotForm({}: IProps) {
             </button>
 
             <div className="bg-red-500 hover:bg-red-700 font-bold py-2 px-4 rounded inline-block">
-              <Link href="/">
+              <Link href={spot ? `/spots/${spot.id}` : "/"}>
                 <a>Cancel</a>
               </Link>
             </div>
