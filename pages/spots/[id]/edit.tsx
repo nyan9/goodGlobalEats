@@ -40,9 +40,7 @@ function SpotData({ id }: { id: string }) {
   const { user } = useAuth();
   const { data, loading } = useQuery<EditSpotQuery, EditSpotQueryVariables>(
     EDIT_SPOT_QUERY,
-    {
-      variables: { id },
-    }
+    { variables: { id } }
   );
 
   if (!user) return <Layout main={<div>Please Login to Edit</div>} />;

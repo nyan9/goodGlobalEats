@@ -23,7 +23,7 @@ export default function SpotNav({ spot }: IProps) {
       {canEdit && (
         <>
           {" | "}
-          <Link href={`/spots/A${spot.id}/edit`}>
+          <Link href={`/spots/${spot.id}/edit`}>
             <a>Edit</a>
           </Link>
         </>

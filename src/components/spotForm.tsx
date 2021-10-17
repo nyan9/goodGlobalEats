@@ -203,7 +203,7 @@ export default function SpotForm({ spot }: IProps) {
     });
 
     if (spotData?.updateSpot) {
-      router.push(`/houses/${currentSpot.id}`);
+      router.push(`/spots/${currentSpot.id}`);
     }
   };
 
