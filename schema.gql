@@ -26,7 +26,6 @@ type Mutation {
 }
 
 type Query {
-  hello: String!
   spot(id: String!): Spot
   spots(bounds: BoundsInput!): [Spot!]!
 }
