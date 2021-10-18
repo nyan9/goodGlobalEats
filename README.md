@@ -60,7 +60,7 @@ Good Global Eats is a full stack restaurant-sharing app inspired by Airbnb's spl
 - *MAP*
   - Search for an area, a city, or country
   - Open a preview of the restaurants
-  - Zoom in/out or move the map for posted restaurants within the visible map
+  - Zoom in/out or move the map to show posted restaurants within the visible map
 
 - *RESTAURANT POSTS*
   - Search for restaurants by name or address
