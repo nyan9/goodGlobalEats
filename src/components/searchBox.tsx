@@ -14,6 +14,7 @@ import {
   ComboboxOption,
 } from "@reach/combobox";
 import "@reach/combobox/styles.css";
+import { useRouter } from "next/router";
 
 interface ISearchBoxProps {
   onSelectSpot: (
@@ -41,6 +42,7 @@ export function SearchBox({ onSelectSpot, defaultValue }: ISearchBoxProps) {
 }
 
 function SpotSearchBox({ onSelectSpot, defaultValue }: ISearchBoxProps) {
+  const { pathname } = useRouter();
   const {
     ready,
     value,
@@ -80,7 +82,11 @@ function SpotSearchBox({ onSelectSpot, defaultValue }: ISearchBoxProps) {
         value={value}
         onChange={handleChange}
         disabled={!ready}
-        placeholder="Enter name or address of the spot"
+        placeholder={
+          pathname !== "/"
+            ? "Enter name or address of the restaurant"
+            : "Enter a city, state, or zip code"
+        }
         autoComplete="off"
       />
 
