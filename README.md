@@ -90,7 +90,7 @@ export function useLastData<S>(data: S) {
 
 `useRef` instead of `useState` to prevent unnecessary rerenders.
 
-```typescript
+```javascript
 // pages/index.tsx
 
 export default function Spot() {
