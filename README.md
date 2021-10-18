@@ -160,7 +160,7 @@ Unauthorized users are sent to `/auth` page to login/signup with the status code
 
 ## TODOs / Features to implement
 
-- [ ] Clusters for when markers overlap each other
+- [ ] Map clusters for when markers overlap each other
 - [ ] Like/Dislike for posts
 
 [Back To The Top :arrow_up_small:](#table-of-contents)
