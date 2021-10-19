@@ -27,21 +27,23 @@ export default function SpotNav({ spot }: IProps) {
   >(DELETE_MUTATION);
 
   return (
-    <>
+    <div className="flex mb-6">
       <Link href="/">
-        <a> Home </a>
+        <button className="bg-green-500 hover:bg-green-700 font-bold py-1 px-2 rounded mr-auto">
+          Home
+        </button>
       </Link>
+
       {canEdit && (
         <>
-          {" | "}
-
           <Link href={`/spots/${spot.id}/edit`}>
-            <a>Edit</a>
+            <button className="bg-blue-500 hover:bg-blue-700 font-bold py-1 px-2 rounded mr-2">
+              Edit
+            </button>
           </Link>
 
-          {" | "}
-
           <button
+            className="bg-red-300 hover:bg-red-700 font-semibold py-1 px-2 rounded"
             disabled={loading}
             type="button"
             onClick={async () => {
@@ -55,6 +57,6 @@ export default function SpotNav({ spot }: IProps) {
           </button>
         </>
       )}
-    </>
+    </div>
   );
 }

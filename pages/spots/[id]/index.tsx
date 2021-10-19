@@ -47,7 +47,11 @@ function SpotData({ id }: { id: string }) {
 
   if (loading || !data) return <Layout main={<div> Loading....</div>} />;
   if (!data.spot) {
-    return <Layout main={<div>Unable to load spot {id}</div>} />;
+    return (
+      <Layout
+        main={<div>Unable to load spot {id}. Please refresh the page.</div>}
+      />
+    );
   }
 
   const { spot } = data;
@@ -59,10 +63,19 @@ function SpotData({ id }: { id: string }) {
           <div className="sm:w-full md:w-1/2 p-4">
             <SpotNav spot={spot} />
 
-            <h1 className="text-3xl my-2">{spot.address}</h1>
+            <h1 className="text-3xl font-semibold my-2">{spot.address}</h1>
+            <h2 className="text-lg font-medium"></h2>
+
+            <h3 className="text-xl font-bold mt-8 mb-2">Recommended:</h3>
+            <h4 className="text-lg font-medium mt-2">🍟 Appetizer</h4>
+            <p>{spot.appetizer}</p>
+            <h4 className="text-lg font-medium mt-2">🍛 Entree</h4>
+            <p>{spot.entree}</p>
+            <h4 className="text-lg font-medium mt-2">🍸 Drink</h4>
+            <p>{spot.drink}</p>
 
             <Image
-              className="pb-2"
+              className="py-2 mt-8"
               cloudName={process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}
               publicId={spot.publicId}
               alt={spot.address}
@@ -74,11 +87,8 @@ function SpotData({ id }: { id: string }) {
               crop="fill"
               gravity="auto"
             />
-
-            <p> Recommended Appetizer: 🍟 {spot.appetizer}</p>
-            <p> Recommended Entree: 🍛 {spot.entree}</p>
-            <p> Recommneded Drink: 🍸 {spot.drink}</p>
           </div>
+
           <div className="sm:w-full md:w-1/2">
             <SingleMap spot={spot} nearby={spot.nearby} />
           </div>

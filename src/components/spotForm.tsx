@@ -336,7 +336,7 @@ export default function SpotForm({ spot }: IProps) {
 
           <div className="mt-4">
             <button
-              className="bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded mr-6"
+              className="bg-green-500 hover:bg-green-700 font-bold py-2 px-4 rounded mr-6"
               type="submit"
               disabled={submitting}
             >
