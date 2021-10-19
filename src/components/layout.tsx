@@ -36,7 +36,7 @@ const Layout: FunctionComponent<IProps> = ({ main }) => {
             </>
           ) : (
             <Link href="/auth">
-              <button className="bg-blue-400 hover:bg-blue-700 font-semibold py-1 px-2 rounded">
+              <button className="bg-green-400 hover:bg-green-700 font-semibold py-1 px-2 rounded">
                 Login
               </button>
             </Link>

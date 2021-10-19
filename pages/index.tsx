@@ -93,14 +93,14 @@ export default function Spot() {
           </div>
           <div className="absolute bottom-10 right-6 z-10 bg-transparent">
             <Link href="/spots/putOn">
-              <button className="p-2 mb-4 bg-green-400 rounded-full">
+              <button className="p-2 mb-4 bg-green-400 hover:bg-green-700 rounded-full">
                 <MdAddLocationAlt size="40" />
               </button>
             </Link>
 
             <br />
 
-            <button className="p-2 bg-green-400 rounded-full">
+            <button className="p-2 bg-green-400 hover:bg-green-700 rounded-full">
               <a target="_blank" href="https://github.com/nyan9/goodGlobalEats">
                 <FaGithub size="40" />
               </a>
