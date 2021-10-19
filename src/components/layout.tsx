@@ -22,12 +22,24 @@ const Layout: FunctionComponent<IProps> = ({ main }) => {
           {authenticated ? (
             <>
               <Link href="/spots/putOn">
-                <a>Put On A Spot</a>
+                <button className="bg-green-400 hover:bg-green-700 font-semibold py-1 px-2 rounded">
+                  Put On a Spot{" "}
+                  <img className="w-6 inline" src="/gge-color.png" />
+                </button>
               </Link>
-              <button onClick={logout}>Logout</button>
+              <button
+                className="bg-red-400 hover:bg-red-700 font-semibold py-1 px-2 rounded"
+                onClick={logout}
+              >
+                Logout
+              </button>
             </>
           ) : (
-            <Link href="/auth"> Login / Signup </Link>
+            <Link href="/auth">
+              <button className="bg-blue-400 hover:bg-blue-700 font-semibold py-1 px-2 rounded">
+                Login
+              </button>
+            </Link>
           )}
         </div>
       </nav>
