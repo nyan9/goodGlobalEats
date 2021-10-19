@@ -218,12 +218,12 @@ export default function SpotForm({ spot }: IProps) {
 
   return (
     <form className="mx-auto max-w-xl py-4" onSubmit={handleSubmit(onSubmit)}>
-      <h1 className="text-xl">
-        {spot ? `Editing ${spot.address}` : "Put On a Spot"}
+      <h1 className="text-xl my-8">
+        {spot ? `Editing ${spot.address}` : "Recommend a Spot"}
       </h1>
 
       <div className="mt-4">
-        <label htmlFor="search" className="block">
+        <label htmlFor="search" className="block mb-2">
           Search for your spot
         </label>
 
@@ -297,44 +297,44 @@ export default function SpotForm({ spot }: IProps) {
           </div>
 
           <div className="mt-4">
-            <label htmlFor="recommended_app" className="block">
+            <label htmlFor="recommended_app" className="block mt-12 mb-2">
               Must Try Appetizer:
             </label>
             <input
               id="recommended_app"
               name="appetizer"
               type="text"
-              className="p-2"
+              className="p-2 w-full"
               ref={register()}
             />
             {errors.appetizer && <p>{errors.appetizer.message}</p>}
 
-            <label htmlFor="recommended_entree" className="block">
+            <label htmlFor="recommended_entree" className="block mt-8 mb-2">
               Must Try Entree:
             </label>
             <input
               id="recommended_entree"
               name="entree"
               type="text"
-              className="p-2"
+              className="p-2 w-full"
               ref={register()}
             />
             {errors.entree && <p>{errors.entree.message}</p>}
 
-            <label htmlFor="recommended_drinks" className="block">
-              Must Try Drinks:
+            <label htmlFor="recommended_drinks" className="block mt-8 mb-2">
+              Must Try Drink:
             </label>
             <input
               id="recommended_drink"
               name="drink"
               type="text"
-              className="p-2"
+              className="p-2 w-full"
               ref={register()}
             />
             {errors.drink && <p>{errors.drink.message}</p>}
           </div>
 
-          <div className="mt-4">
+          <div className="mt-16">
             <button
               className="bg-green-500 hover:bg-green-700 font-bold py-2 px-4 rounded mr-6"
               type="submit"
