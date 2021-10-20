@@ -176,7 +176,7 @@ Unauthorized users are sent to `/auth` page to login/signup with the status code
 
 ## Author Info
 
-- Ryan Naing - [Portfolio](www.RyanNaing.com)
+- Ryan Naing - [Portfolio](https://RyanNaing.com)
 
 
 [Back To The Top :arrow_up_small:](#table-of-contents)
