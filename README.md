@@ -3,7 +3,8 @@
 <h1 align="center"> Good Global Eats </h1> <br>
 <p align="center">
     <a href="https://good-global-eats.vercel.app/">
-        <img alt="Good Global Eats Logo" title="Good Global Eats" src="public/sushi.svg" width="200">
+        <img alt="Good Global Eats Logo" title="Good Global Eats" src="public/sushi.svg" width="200" >
+        <img alt="Map gif" title="Map" src="public/goodglobaleats.gif" width="600" >
     </a>
 </p>
 
@@ -51,21 +52,26 @@ Good Global Eats is a full stack restaurant-sharing app inspired by Airbnb's spl
 
 ## Features
 
-<img alt="" title="" src="" width="500"  align="right">
-
 - *USER AUTH*
   - Login, Create Account
   - or explore as guest / demo-user
+
+<img alt="Auth gif" title="Auth" src="github/crud.gif" width="800">
 
 - *MAP*
   - Search for an area, a city, or country
   - Open a preview of the restaurants
   - Zoom in/out or move the map to show posted restaurants within the visible map
 
+
+<img alt="Map gif" title="Map" src="public/goodglobaleats.gif" width="800">
+
 - *RESTAURANT POSTS*
   - Search for restaurants by name or address
   - Upload recommended menu items with an image
   - Delete or edit your own posts
+
+<img alt="Search gif" title="Search" src="github/search.gif" width="800">
 
 [Back To The Top :arrow_up_small:](#table-of-contents)
 
@@ -162,6 +168,7 @@ Unauthorized users are sent to `/auth` page to login/signup with the status code
 
 - [ ] Map clusters for when markers overlap each other
 - [ ] Like/Dislike for posts
+- [ ] User page with their posts
 
 [Back To The Top :arrow_up_small:](#table-of-contents)
 
