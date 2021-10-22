@@ -40,6 +40,7 @@ Good Global Eats is a full stack restaurant-sharing app inspired by Airbnb's spl
 - Firebase Auth
 - Mapbox
 - Google Places
+- Heroku
 
 ### Libraries & Methodologies
 
