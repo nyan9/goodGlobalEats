@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Transpile next-auth v5 (ESM) through Next.js bundler so it works
-  // alongside the Babel-based decorator pipeline required by type-graphql.
+  // next-auth v5 ships pure ESM; transpilePackages lets Next.js bundle it
+  // correctly without Babel (SWC handles the ESM transform).
   transpilePackages: ["next-auth", "@auth/core"],
 };
 

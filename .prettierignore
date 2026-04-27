@@ -5,3 +5,5 @@ yarn.lock
 package-lock.json
 prisma/migrations
 public
+schema.gql
+tsconfig.scripts.json
