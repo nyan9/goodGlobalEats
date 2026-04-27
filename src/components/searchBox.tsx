@@ -1,9 +1,7 @@
 import { ChangeEvent } from "react";
-import { FunctionComponent } from "react";
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
-  getDetails,
 } from "use-places-autocomplete";
 import { useGoogleMapsScript, Libraries } from "use-google-maps-script";
 import {
@@ -29,7 +27,7 @@ const libraries: Libraries = ["places"];
 
 export function SearchBox({ onSelectSpot, defaultValue }: ISearchBoxProps) {
   const { isLoaded, loadError } = useGoogleMapsScript({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY ?? "",
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "",
     libraries,
   });
 
