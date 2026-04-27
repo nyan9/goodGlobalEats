@@ -11,7 +11,10 @@ interface GqlContext {
   prisma: typeof prisma;
 }
 
-const server = new ApolloServer<GqlContext>({ schema });
+const server = new ApolloServer<GqlContext>({
+  schema,
+  introspection: process.env.NODE_ENV !== "production",
+});
 
 export default startServerAndCreateNextHandler<NextApiRequest, GqlContext>(
   server,

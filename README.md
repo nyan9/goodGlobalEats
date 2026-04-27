@@ -2,178 +2,144 @@
 
 <h1 align="center"> Good Global Eats </h1> <br>
 <p align="center">
-    <a href="https://good-global-eats.vercel.app/">
-        <img alt="Good Global Eats Logo" title="Good Global Eats" src="public/sushi.svg" width="200" >
-        <img alt="Map gif" title="Map" src="public/goodglobaleats.gif" width="600" >
-    </a>
+    <img alt="Good Global Eats Logo" title="Good Global Eats" src="public/sushi.svg" width="200" >
+    <img alt="Map gif" title="Map" src="public/goodglobaleats.gif" width="600" >
 </p>
 
 <p align="center" > Good Eats Across The Globe! </p>
-<p align="center" > <a href="https://good-global-eats.vercel.app/"> 🍣 LINK TO LIVE SITE </a></p>
 
 ## Table of Contents
 
 1. [Overview](#overview)
-   - [Technologies](#technologies)
-   - [Libraries & Methodologies](#libraries--methodologies)
+   - [Tech stack](#tech-stack)
 2. [Features](#features)
-3. [Technical Implementation Details](#technical-implementation-details)
-   - [Data Flickering](#data-flickering)
-   - [Server Side Auth](#server-side-auth)
-4. [TODOs / Features to implement](#todos--features-to-implement)
-5. [Author Info](#author-info)
+3. [Local development](#local-development)
+4. [Deploying to Vercel + Neon](#deploying-to-vercel--neon)
+5. [Architecture notes](#architecture-notes)
+6. [TODOs](#todos)
+7. [Author](#author)
 
 ## Overview
 
-Good Global Eats is a full stack restaurant-sharing app inspired by Airbnb's split map UI design. Find your next good eats anywhere in the world or put other users on to your own favorite spots.
+Good Global Eats is a full-stack restaurant-sharing app inspired by Airbnb's split-map UI. Discover restaurants worldwide on an interactive map, or share your own favorite spots.
 
-### Technologies
+### Tech stack
 
-- Next.js
-- TypeScript
-- GraphQL
-- PostgreSQL
-- Tailwind CSS
-- Cloudinary
-- Firebase Auth
-- Mapbox
-- Google Places
-- Heroku
-
-### Libraries & Methodologies
-
-- [Prisma](https://github.com/prisma/prisma) for data modeling, migrations, and data access to the PostgreSQL database.
-- [Apollo Client](https://github.com/apollographql/apollo-client) for GraphQL querires and mutations.
-- [Apollo Server](https://github.com/apollographql/apollo-server) for establishing self-documenting GraphQL server.
-- [geolib](https://github.com/manuelbieh/geolib) for calculating coordinates bounds to find nearby restaurants.
-- [React Hook Form](https://github.com/react-hook-form/react-hook-form) for upload post form validations.
-- [react-map-gl](https://github.com/visgl/react-map-gl) for Mapbox markers and pop-ups.
+- **Next.js 14** (Pages Router) on Node 20
+- **TypeScript 5**
+- **Apollo Server 4** + **Apollo Client 3.13** + **type-graphql 2** + **graphql-codegen**
+- **Prisma 5** against **PostgreSQL** (Neon in production)
+- **Auth.js v5** (Google OAuth, database session strategy via Prisma adapter)
+- **Tailwind CSS** for styling
+- **react-map-gl** + **Mapbox** for the map
+- **Cloudinary** for image hosting
+- **Google Places** for address autocomplete
+- Deployed on **Vercel**
 
 ## Features
 
-- _USER AUTH_
-  - Login, Create Account
-  - or explore as guest / demo-user
+- **Sign in** with Google
+- **Map** — search by city / area / country, zoom to see posted restaurants in view, click markers for previews
+- **Restaurant posts** — create with photo upload, edit, and delete your own posts; view anyone's posts on the map
 
-<img alt="Auth gif" title="Auth" src="github/crud.gif" width="800">
+## Local development
 
-- _MAP_
-  - Search for an area, a city, or country
-  - Open a preview of the restaurants
-  - Zoom in/out or move the map to show posted restaurants within the visible map
+### Prerequisites
 
-<img alt="Map gif" title="Map" src="public/goodglobaleats.gif" width="800">
+- Node 20 (use `nvm use` — pinned via `.nvmrc`)
+- Yarn 1.22 (`corepack enable && corepack prepare yarn@1.22.22 --activate`)
+- A local Postgres or a Neon dev branch
 
-- _RESTAURANT POSTS_
-  - Search for restaurants by name or address
-  - Upload recommended menu items with an image
-  - Delete or edit your own posts
+### Setup
 
-<img alt="Search gif" title="Search" src="github/search.gif" width="800">
-
-[Back To The Top :arrow_up_small:](#table-of-contents)
-
-## Technical Implementation Details
-
-### Data Flickering
-
-When Apollo is performing GraphQL queries while a user is interacting with the map (zooming in/out, dragging), it returns `undefined` before it returns the desired data. While Apollo is in the loading state, it doesn't give me access to the previous data, even if the new data being returned is the same as before the loading state. <br>
-To prevent this, I implemented a custom hook that takes in data from Apollo and returns when it's not `undefined` or `null`.
-
-```javascript
-// src/utils/useLastData.ts
-
-export function useLastData<S>(data: S) {
-  const ref = useRef(data);
-  if (data !== null && data !== undefined) {
-    ref.current = data;
-  }
-
-  return ref.current;
-}
+```bash
+git clone git@github.com:nyan9/goodGlobalEats.git
+cd goodGlobalEats
+cp .env.example .env.local        # fill in the values — see below
+yarn install                       # runs prisma generate via postinstall
+yarn db:migrate                    # applies prisma/migrations to your local DB
+yarn dev                           # http://localhost:3000
 ```
 
-`useRef` instead of `useState` to prevent unnecessary rerenders.
+### Required env vars (`.env.local`)
 
-```javascript
-// pages/index.tsx
+| Variable                                                                                 | Where to get it                                                                                                                                                                                                            |
+| ---------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DATABASE_URL`                                                                           | Local Postgres or a Neon dev branch (`postgres://user:pass@host:5432/db`)                                                                                                                                                  |
+| `AUTH_SECRET`                                                                            | Generate: `openssl rand -base64 32`                                                                                                                                                                                        |
+| `NEXTAUTH_URL`                                                                           | `http://localhost:3000` for dev                                                                                                                                                                                            |
+| `AUTH_GOOGLE_ID` / `AUTH_GOOGLE_SECRET`                                                  | [Google Cloud Console → APIs & Services → Credentials](https://console.cloud.google.com/apis/credentials) → create OAuth client (web). Add `http://localhost:3000/api/auth/callback/google` as an authorized redirect URI. |
+| `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` / `NEXT_PUBLIC_CLOUDINARY_KEY` / `CLOUDINARY_SECRET` | [Cloudinary console](https://console.cloudinary.com/)                                                                                                                                                                      |
+| `NEXT_PUBLIC_MAPBOX_API_TOKEN`                                                           | [Mapbox account → tokens](https://account.mapbox.com/access-tokens/)                                                                                                                                                       |
+| `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`                                                        | Same Google Cloud project; enable the Places API and Maps JavaScript API for the key. Restrict by HTTP referrer.                                                                                                           |
 
-export default function Spot() {
-  const [dataBounds, setDataBounds] = useLocalState<string>(
-    "bounds",
-    "[[0,0],[0,0]]"
-  );
+### Useful scripts
 
-  // reduce the amount of queries called to the apollo server when zooming in/out of map
-  const [debouncedDataBounds] = useDebounce(dataBounds, 200);
-  const { data, error } = useQuery<SpotsQuery, SpotsQueryVariables>(
-    SPOTS_QUERY,
-    {
-      variables: { bounds: parseBounds(debouncedDataBounds) },
-    }
-  );
-
-  // custom hook to prevent data flickering (undefined) when querying SPOTS_QUERY
-  const lastData = useLastData(data);
-
-  return (
-    <>
-      ....
-      <Map
-        setDataBounds={setDataBounds}
-        spots={lastData ? lastData.spots : []}
-        ....
-      />
-    </>
-  )
-}
+```bash
+yarn dev              # next dev
+yarn build            # next build
+yarn start            # next start (after build)
+yarn typecheck        # tsc --noEmit
+yarn lint             # next lint
+yarn format           # prettier --write
+yarn codegen          # regenerate src/generated/types.ts from src/schema/**
+yarn db:migrate       # prisma migrate dev (creates a new migration on schema changes)
+yarn db:deploy        # prisma migrate deploy (production)
+yarn db:push          # prisma db push (dev-only; skips migration history)
 ```
 
-[Back To The Top :arrow_up_small:](#table-of-contents)
+## Deploying to Vercel + Neon
 
-### Server Side Auth
+### One-time setup
 
-Visiting protected routes such as edit/putOn pages re-routes unauthorized users to the login/signup page on the server side before the requested page is served to the front-end.
-`getServerSideProps` method provided by Next.js is used to check if the user is authenticated on the server side to re-route them accordingly.
+1. **Create a Neon project** at [neon.tech](https://neon.tech). Use a region close to your Vercel function region (e.g. `us-east-1`). Note the **pooled connection string** (used as `DATABASE_URL`).
+2. **Create a Google OAuth client** at [Google Cloud Console → Credentials](https://console.cloud.google.com/apis/credentials):
+   - Application type: Web application
+   - Authorized redirect URIs: `https://<your-vercel-domain>/api/auth/callback/google` (and any custom domains)
+3. **Apply migrations to Neon once:**
+   ```bash
+   DATABASE_URL='postgres://...' yarn db:deploy
+   ```
+4. **Configure Vercel env vars** (Project → Settings → Environment Variables, set for both **Production** and **Preview**):
+   - `DATABASE_URL` (Neon pooled)
+   - `AUTH_SECRET` (`openssl rand -base64 32`, fresh per env)
+   - `NEXTAUTH_URL` (your prod URL, e.g. `https://good-global-eats.vercel.app`)
+   - `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`
+   - `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME`, `NEXT_PUBLIC_CLOUDINARY_KEY`, `CLOUDINARY_SECRET`
+   - `NEXT_PUBLIC_MAPBOX_API_TOKEN`
+   - `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`
+5. **Trigger a production deploy** — push to `main` or click "Redeploy" in Vercel.
 
-```javascript
-// pages/spots/putOn.tsx
+### Verifying
 
-export default function PutOn() {
-  return <Layout main={<SpotForm />} />;
-}
+- Visit the production URL → sign in with Google → expect a Vercel-domain callback.
+- Create a Spot (with a photo upload via Cloudinary) → confirm it appears on the map.
+- Edit and delete the Spot → confirm the gating (`user.uid === spot.userId`) prevents editing other users' posts.
 
-// intercept putOn route access
-// redirect to "/auth" if not logged in
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  const uid = await loadIdToken(req as NextApiRequest);
+## Architecture notes
 
-  if (!uid) {
-    res.setHeader("location", "/auth");
-    res.statusCode = 302;
-    res.end();
-  }
+### Server-side auth gating
 
-  return { props: {} };
-};
-```
+Protected pages (`pages/spots/[id]/edit.tsx`, `pages/spots/putOn.tsx`) read the session via Auth.js's `auth(context)` inside `getServerSideProps` and 302 to `/auth` if there's no session.
 
-Unauthorized users are sent to `/auth` page to login/signup with the status code of 302 (`redirect`)
+### GraphQL context
 
-[Back To The Top :arrow_up_small:](#table-of-contents)
+`pages/api/graphql.ts` uses `@apollo/server@4` + `@as-integrations/next`. Per-request context is `{ uid, prisma }`, where `uid` comes from `auth(req, res)` reading the Auth.js session cookie. Resolvers in `src/schema/spot.ts` use the `@Authorized()` decorator + a `uid === spot.userId` check for mutations.
 
-## TODOs / Features to implement
+### Codegen
 
-- [ ] Map clusters for when markers overlap each other
-- [ ] Like/Dislike for posts
-- [ ] User page with their posts
+`yarn codegen` runs `scripts/print-schema.ts` (which builds the type-graphql schema and writes `schema.gql`), then `graphql-codegen --config codegen.ts` to emit `src/generated/types.ts`. The 8 historical per-operation files in `src/generated/` are now thin shims re-exporting from `types.ts` for back-compat.
 
-[Back To The Top :arrow_up_small:](#table-of-contents)
+### Data flicker prevention
 
----
+`src/utils/useLastData.ts` returns the previous Apollo result while a new query is loading, preventing the map from blanking out during pan/zoom transitions.
 
-## Author Info
+## TODOs
 
-- Ryan Naing - [Portfolio](https://RyanNaing.com)
+- [ ] Map clusters when markers overlap
+- [ ] Like / Dislike on posts
+- [ ] User profile page
 
-[Back To The Top :arrow_up_small:](#table-of-contents)
+## Author
+
+[Ryan Naing](https://RyanNaing.com)
