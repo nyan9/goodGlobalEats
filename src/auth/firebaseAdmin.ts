@@ -21,7 +21,7 @@ const verifyIdToken = (token: string) => {
 };
 
 export const loadIdToken = async (
-  req: NextApiRequest
+  req: NextApiRequest,
 ): Promise<string | null> => {
   if (!req.cookies.token) return null;
 

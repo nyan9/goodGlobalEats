@@ -40,7 +40,7 @@ function SpotData({ id }: { id: string }) {
   const { user } = useAuth();
   const { data, loading } = useQuery<EditSpotQuery, EditSpotQueryVariables>(
     EDIT_SPOT_QUERY,
-    { variables: { id } }
+    { variables: { id } },
   );
 
   if (!user) return <Layout main={<div>Please Login to Edit</div>} />;
@@ -49,7 +49,9 @@ function SpotData({ id }: { id: string }) {
     return <Layout main={<div>Unable to load house</div>} />;
   if (user.uid !== data?.spot?.userId)
     return (
-      <Layout main={<div>You don't have permission to edit this spot</div>} />
+      <Layout
+        main={<div>You don&apos;t have permission to edit this spot</div>}
+      />
     );
 
   return <Layout main={<SpotForm spot={data.spot} />} />;

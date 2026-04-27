@@ -42,7 +42,7 @@ export default function ShowSpot() {
 function SpotData({ id }: { id: string }) {
   const { data, loading } = useQuery<ShowSpotQuery, ShowSpotQueryVariables>(
     SHOW_SPOT_QUERY,
-    { variables: { id } }
+    { variables: { id } },
   );
 
   if (loading || !data) return <Layout main={<div> Loading....</div>} />;

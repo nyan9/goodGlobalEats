@@ -4,7 +4,6 @@ import {
   Field,
   ID,
   Float,
-  Int,
   Resolver,
   Query,
   Mutation,
@@ -102,7 +101,7 @@ class Spot {
         latitude: this.latitude,
         longitude: this.longitude,
       },
-      1000
+      1000,
     );
 
     return ctx.prisma.spot.findMany({
@@ -120,7 +119,7 @@ class Spot {
 export class SpotResolver {
   @Query((_returns) => Spot, { nullable: true })
   async spot(@Arg("id") id: string, @Ctx() ctx: Context) {
-    return ctx.prisma.spot.findOne({ where: { id: parseInt(id, 10) } });
+    return ctx.prisma.spot.findUnique({ where: { id: parseInt(id, 10) } });
   }
 
   @Query((_returns) => [Spot], { nullable: false })
@@ -138,7 +137,7 @@ export class SpotResolver {
   @Mutation((_returns) => Spot, { nullable: true })
   async createSpot(
     @Arg("input") input: SpotInput,
-    @Ctx() ctx: AuthorizedContext
+    @Ctx() ctx: AuthorizedContext,
   ) {
     return await ctx.prisma.spot.create({
       data: {
@@ -159,10 +158,10 @@ export class SpotResolver {
   async updateSpot(
     @Arg("id") id: string,
     @Arg("input") input: SpotInput,
-    @Ctx() ctx: AuthorizedContext
+    @Ctx() ctx: AuthorizedContext,
   ) {
     const spotId = parseInt(id, 10);
-    const spot = await ctx.prisma.spot.findOne({ where: { id: spotId } });
+    const spot = await ctx.prisma.spot.findUnique({ where: { id: spotId } });
 
     if (!spot || spot.userId !== ctx.uid) return null;
 
@@ -184,10 +183,10 @@ export class SpotResolver {
   @Mutation((_returns) => Boolean, { nullable: false })
   async deleteSpot(
     @Arg("id") id: string,
-    @Ctx() ctx: AuthorizedContext
+    @Ctx() ctx: AuthorizedContext,
   ): Promise<boolean> {
     const spotId = parseInt(id, 10);
-    const spot = await ctx.prisma.spot.findOne({ where: { id: spotId } });
+    const spot = await ctx.prisma.spot.findUnique({ where: { id: spotId } });
 
     if (!spot || spot.userId !== ctx.uid) return false;
 

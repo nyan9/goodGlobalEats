@@ -55,7 +55,7 @@ interface IUploadImageResponse {
 async function uploadImage(
   image: File,
   signature: string,
-  timestamp: number
+  timestamp: number,
 ): Promise<IUploadImageResponse> {
   const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`;
 
@@ -103,25 +103,23 @@ export default function SpotForm({ spot }: IProps) {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [previewImage, setPreviewImage] = useState<string>();
-  const { register, handleSubmit, setValue, errors, watch } = useForm<
-    IFormData
-  >({
-    defaultValues: spot
-      ? {
-          address: spot.address,
-          latitude: spot.latitude,
-          longitude: spot.longitude,
-          appetizer: spot.appetizer,
-          entree: spot.entree,
-          drink: spot.drink,
-        }
-      : {},
-  });
+  const { register, handleSubmit, setValue, errors, watch } =
+    useForm<IFormData>({
+      defaultValues: spot
+        ? {
+            address: spot.address,
+            latitude: spot.latitude,
+            longitude: spot.longitude,
+            appetizer: spot.appetizer,
+            entree: spot.entree,
+            drink: spot.drink,
+          }
+        : {},
+    });
   const address = watch("address");
 
-  const [createSignature] = useMutation<CreateSignatureMutation>(
-    SIGNATURE_MUTATION
-  );
+  const [createSignature] =
+    useMutation<CreateSignatureMutation>(SIGNATURE_MUTATION);
   const [createSpot] = useMutation<
     CreateSpotMutation,
     CreateSpotMutationVariables
@@ -134,7 +132,7 @@ export default function SpotForm({ spot }: IProps) {
   useEffect(() => {
     register(
       { name: "address" },
-      { required: "Please enter name of the spot" }
+      { required: "Please enter name of the spot" },
     );
     register({ name: "latitude" }, { required: true, min: -90, max: 90 });
     register({ name: "longitude" }, { required: true, min: -180, max: 180 });
@@ -179,7 +177,7 @@ export default function SpotForm({ spot }: IProps) {
         const imageData = await uploadImage(
           data.image[0],
           signature,
-          timestamp
+          timestamp,
         );
         image = imageData.secure_url;
       }

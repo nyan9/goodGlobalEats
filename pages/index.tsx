@@ -44,15 +44,15 @@ const parseBounds = (boundsString: string) => {
 
 export default function Spot() {
   const [highlightedMarkId, setHighlightedMarkId] = useState<string | null>(
-    null
+    null,
   );
   const [highlightedListId, setHighlightedListId] = useState<string | null>(
-    null
+    null,
   );
   // string type because useDebounce does a shallow compare. Also being saved to localStorage.
   const [dataBounds, setDataBounds] = useLocalState<string>(
     "bounds",
-    "[[0,0],[0,0]]"
+    "[[0,0],[0,0]]",
   );
 
   // reduce the amount of queries called to the apollo server when zooming in/out of map
@@ -61,7 +61,7 @@ export default function Spot() {
     SPOTS_QUERY,
     {
       variables: { bounds: parseBounds(debouncedDataBounds) },
-    }
+    },
   );
 
   // custom hook to prevent data flickering (undefined) when querying SPOTS_QUERY
