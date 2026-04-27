@@ -1,37 +1,11 @@
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
+// Re-export from generated types for backward compatibility
+export type {
+  ShowSpotQueryQuery as ShowSpotQuery,
+  ShowSpotQueryQueryVariables as ShowSpotQueryVariables,
+} from "./types";
 
-// ====================================================
-// GraphQL query operation: ShowSpotQuery
-// ====================================================
+import type { ShowSpotQueryQuery } from "./types";
 
-export interface ShowSpotQuery_spot_nearby {
-  __typename: "Spot";
-  id: string;
-  latitude: number;
-  longitude: number;
-}
-
-export interface ShowSpotQuery_spot {
-  __typename: "Spot";
-  id: string;
-  userId: string;
-  address: string;
-  publicId: string;
-  appetizer: string;
-  entree: string;
-  drink: string;
-  latitude: number;
-  longitude: number;
-  nearby: ShowSpotQuery_spot_nearby[];
-}
-
-export interface ShowSpotQuery {
-  spot: ShowSpotQuery_spot | null;
-}
-
-export interface ShowSpotQueryVariables {
-  id: string;
-}
+export type ShowSpotQuery_spot = NonNullable<ShowSpotQueryQuery["spot"]>;
+export type ShowSpotQuery_spot_nearby =
+  ShowSpotQuery_spot["nearby"][number];

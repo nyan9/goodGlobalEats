@@ -1,32 +1,11 @@
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
+// Re-export from generated types for backward compatibility
+export type {
+  UpdateSpotMutationMutation as UpdateSpotMutation,
+  UpdateSpotMutationMutationVariables as UpdateSpotMutationVariables,
+} from "./types";
 
-import { SpotInput } from "./globalTypes";
+import type { UpdateSpotMutationMutation } from "./types";
 
-// ====================================================
-// GraphQL mutation operation: UpdateSpotMutation
-// ====================================================
-
-export interface UpdateSpotMutation_updateSpot {
-  __typename: "Spot";
-  id: string;
-  image: string;
-  publicId: string;
-  address: string;
-  latitude: number;
-  longitude: number;
-  appetizer: string;
-  entree: string;
-  drink: string;
-}
-
-export interface UpdateSpotMutation {
-  updateSpot: UpdateSpotMutation_updateSpot | null;
-}
-
-export interface UpdateSpotMutationVariables {
-  id: string;
-  input: SpotInput;
-}
+export type UpdateSpotMutation_updateSpot = NonNullable<
+  UpdateSpotMutationMutation["updateSpot"]
+>;

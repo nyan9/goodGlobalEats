@@ -1,23 +1,11 @@
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
+// Re-export from generated types for backward compatibility
+export type {
+  CreateSpotMutationMutation as CreateSpotMutation,
+  CreateSpotMutationMutationVariables as CreateSpotMutationVariables,
+} from "./types";
 
-import { SpotInput } from "./globalTypes";
+import type { CreateSpotMutationMutation } from "./types";
 
-// ====================================================
-// GraphQL mutation operation: CreateSpotMutation
-// ====================================================
-
-export interface CreateSpotMutation_createSpot {
-  __typename: "Spot";
-  id: string;
-}
-
-export interface CreateSpotMutation {
-  createSpot: CreateSpotMutation_createSpot | null;
-}
-
-export interface CreateSpotMutationVariables {
-  input: SpotInput;
-}
+export type CreateSpotMutation_createSpot = NonNullable<
+  CreateSpotMutationMutation["createSpot"]
+>;

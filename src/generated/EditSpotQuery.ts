@@ -1,30 +1,9 @@
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
+// Re-export from generated types for backward compatibility
+export type {
+  EditSpotQueryQuery as EditSpotQuery,
+  EditSpotQueryQueryVariables as EditSpotQueryVariables,
+} from "./types";
 
-// ====================================================
-// GraphQL query operation: EditSpotQuery
-// ====================================================
+import type { EditSpotQueryQuery } from "./types";
 
-export interface EditSpotQuery_spot {
-  __typename: "Spot";
-  id: string;
-  userId: string;
-  address: string;
-  image: string;
-  publicId: string;
-  appetizer: string;
-  entree: string;
-  drink: string;
-  latitude: number;
-  longitude: number;
-}
-
-export interface EditSpotQuery {
-  spot: EditSpotQuery_spot | null;
-}
-
-export interface EditSpotQueryVariables {
-  id: string;
-}
+export type EditSpotQuery_spot = NonNullable<EditSpotQueryQuery["spot"]>;

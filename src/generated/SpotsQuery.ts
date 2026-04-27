@@ -1,30 +1,10 @@
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
+// Re-export from generated types for backward compatibility
+export type {
+  SpotsQueryQuery as SpotsQuery,
+  SpotsQueryQueryVariables as SpotsQueryVariables,
+} from "./types";
 
-import { BoundsInput } from "./globalTypes";
+import type { SpotsQueryQuery } from "./types";
 
-// ====================================================
-// GraphQL query operation: SpotsQuery
-// ====================================================
-
-export interface SpotsQuery_spots {
-  __typename: "Spot";
-  id: string;
-  latitude: number;
-  longitude: number;
-  address: string;
-  publicId: string;
-  appetizer: string;
-  entree: string;
-  drink: string;
-}
-
-export interface SpotsQuery {
-  spots: SpotsQuery_spots[];
-}
-
-export interface SpotsQueryVariables {
-  bounds: BoundsInput;
-}
+// SpotsQuery_spots is the element type of the spots array
+export type SpotsQuery_spots = SpotsQueryQuery["spots"][number];

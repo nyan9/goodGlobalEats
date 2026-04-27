@@ -1,18 +1,10 @@
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
+// Re-export from generated types for backward compatibility
+export type {
+  CreateSignatureMutationMutation as CreateSignatureMutation,
+  CreateSignatureMutationMutationVariables as CreateSignatureMutationVariables,
+} from "./types";
 
-// ====================================================
-// GraphQL mutation operation: CreateSignatureMutation
-// ====================================================
+import type { CreateSignatureMutationMutation } from "./types";
 
-export interface CreateSignatureMutation_createImageSignature {
-  __typename: "ImageSignature";
-  signature: string;
-  timestamp: number;
-}
-
-export interface CreateSignatureMutation {
-  createImageSignature: CreateSignatureMutation_createImageSignature;
-}
+export type CreateSignatureMutation_createImageSignature =
+  CreateSignatureMutationMutation["createImageSignature"];
