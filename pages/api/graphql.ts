@@ -1,15 +1,22 @@
 import "reflect-metadata";
-import { NextApiRequest } from "next";
+import type { NextApiRequest, NextApiResponse } from "next";
 import { ApolloServer } from "apollo-server-micro";
 import { schema } from "src/schema";
 import { Context } from "src/schema/context";
 import { prisma } from "src/prisma";
-import { loadIdToken } from "src/auth/firebaseAdmin";
+import { auth } from "../../auth";
 
 const server = new ApolloServer({
   schema,
-  context: async ({ req }: { req: NextApiRequest }): Promise<Context> => {
-    const uid = await loadIdToken(req);
+  context: async ({
+    req,
+    res,
+  }: {
+    req: NextApiRequest;
+    res: NextApiResponse;
+  }): Promise<Context> => {
+    const session = await auth(req, res);
+    const uid = session?.user?.id ?? null;
 
     return {
       uid,

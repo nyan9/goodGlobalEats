@@ -1,7 +1,7 @@
-import { GetServerSideProps, NextApiRequest } from "next";
+import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useQuery, gql } from "@apollo/client";
-import { loadIdToken } from "src/auth/firebaseAdmin";
+import { auth } from "../../../auth";
 import Layout from "src/components/layout";
 import SpotForm from "src/components/spotForm";
 import { useAuth } from "src/auth/useAuth";
@@ -57,13 +57,16 @@ function SpotData({ id }: { id: string }) {
   return <Layout main={<SpotForm spot={data.spot} />} />;
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  const uid = await loadIdToken(req as NextApiRequest);
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await auth(context);
 
-  if (!uid) {
-    res.setHeader("location", "/auth");
-    res.statusCode = 302;
-    res.end();
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/auth",
+        permanent: false,
+      },
+    };
   }
 
   return { props: {} };
