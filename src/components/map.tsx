@@ -2,7 +2,14 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { useRef, useState } from "react";
 import Link from "next/link";
 import { Image } from "cloudinary-react";
-import ReactMapGL, { Marker, Popup, ViewState } from "react-map-gl";
+import ReactMapGL, {
+  InteractiveMap,
+  Marker,
+  Popup,
+  ViewState,
+  ViewportProps,
+  ExtraState,
+} from "react-map-gl";
 import { useLocalState } from "src/utils/useLocalState";
 import { SpotsQuery_spots } from "src/generated/SpotsQuery";
 import { SearchBox } from "./searchBox";
@@ -21,7 +28,7 @@ export default function Map({
   setHighlightedListId,
 }: IProps) {
   const [selected, setSelected] = useState<SpotsQuery_spots | null>(null);
-  const mapRef = useRef<ReactMapGL | null>(null);
+  const mapRef = useRef<InteractiveMap | null>(null);
   const [viewPort, setViewPort] = useLocalState<ViewState>("viewport", {
     latitude: 40.692241,
     longitude: -73.962587,
@@ -35,8 +42,12 @@ export default function Map({
         width="100%"
         height="calc(100vh - 64px)"
         mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_TOKEN}
-        onViewportChange={(nextViewport) => setViewPort(nextViewport)}
-        ref={(instance) => (mapRef.current = instance)}
+        onViewportChange={(nextViewport: ViewportProps) =>
+          setViewPort(nextViewport)
+        }
+        ref={(instance: InteractiveMap | null) => {
+          mapRef.current = instance;
+        }}
         minZoom={5}
         maxZoom={18}
         mapStyle="mapbox://styles/ryan9/ckulvcm7f3tmo17s6txyrq355"
@@ -48,7 +59,7 @@ export default function Map({
           }
         }}
         // only get the bounds of the map when it's not being dragged and rendered
-        onInteractionStateChange={(extra) => {
+        onInteractionStateChange={(extra: ExtraState) => {
           if (!extra.isDragging && mapRef.current) {
             const bounds = mapRef.current.getMap().getBounds();
 
@@ -64,7 +75,7 @@ export default function Map({
             defaultValue=""
             onSelectSpot={(_address, latitude, longitude) => {
               if (latitude && longitude) {
-                setViewPort((prev) => ({
+                setViewPort((prev: ViewState) => ({
                   ...prev,
                   latitude,
                   longitude,
@@ -117,7 +128,7 @@ export default function Map({
             closeOnClick={false}
           >
             <div className="text-center">
-              <h3 className="px-4">{selected.address.substr(0, 30)}</h3>
+              <h3 className="px-4">{selected.address.slice(0, 30)}</h3>
               <Image
                 className="mx-auto my-4"
                 cloudName={process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}

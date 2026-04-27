@@ -20,7 +20,7 @@ interface ISearchBoxProps {
   onSelectSpot: (
     address: string,
     latitude: number | null,
-    longtitude: number | null
+    longtitude: number | null,
   ) => void;
   defaultValue: string;
 }
